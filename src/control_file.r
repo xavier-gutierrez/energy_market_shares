@@ -18,7 +18,6 @@ require(mlogit)
 
 path_code = "C:/Users/guti220/Desktop/energy_market_shares/src/"
 path_data = "C:/Users/guti220/Desktop/energy_market_shares/data/"
-path_data = "C:/Users/guti220/Desktop/fuzzy-waffle-download/data/"
 path_figure = "C:/Users/guti220/Desktop/energy_market_shares/figures/"
 # Local path to the cloned data and code folders in the repository
 
