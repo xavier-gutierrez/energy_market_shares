@@ -34,3 +34,6 @@ vignettes/*.pdf
 
 # Figures 
 figures/
+
+# Task management
+*.docs
