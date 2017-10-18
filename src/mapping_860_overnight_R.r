@@ -1,6 +1,6 @@
-cap.raw = read.table(paste(path_data, "capacity_eia.txt.gz", sep=""), sep="\t", header=TRUE, comment.char="")
+cap.raw = read.table(paste(base, "data-raw/capacity_eia.tsv", sep=""), sep="\t", header=TRUE, comment.char="")
 cap.raw$summer_capacity = as.numeric(as.character(cap.raw$summer_capacity))
-retirement = read.table(paste(path_data, "retirement.eia860.txt", sep=""), sep="\t", header=TRUE, comment.char="", as.is = TRUE)
+retirement = read.table(paste(base, "data-raw/retirement.eia860.txt", sep=""), sep="\t", header=TRUE, comment.char="", as.is = TRUE)
 retirement = retirement %>%
   mutate(generator_code = tolower(generator_code)) %>%
   mutate(generator_code = gsub(" ","", generator_code)) %>%
@@ -230,11 +230,6 @@ eia.mapping = eia.mapping %>%
 cap.eia = cap.eia %>%
   left_join(eia.mapping, by = c("prime_mover", "fuel_1", "prime_mover_text", "fuel_1_text"))
 
-
-
-gz1 = gzfile(paste(path_data,"mapping_860_overnight_R.txt.gz", sep=""), "w")
-write.table(cap.eia, file = gz1, sep="\t",col.names = TRUE, row.names = FALSE)
-close(gz1)
-# Output the cleaned up data to the data folder as a .txt.gz file
+write.csv(cap.eia, file=paste(base, "data-proc/mapping_860_overnight.csv", sep=''))
 
 rm(cap.raw, eia.dict.6, eia.dict.5, eia.dict.4, eia.dict.3, eia.dict.2, eia.dict.1, eia.mapping)

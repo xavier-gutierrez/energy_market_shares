@@ -1,10 +1,9 @@
 
 # plant_capacity_mw (form860) ---------------------------------------------
 
-
 cap.eia = read.table(paste0(path_data, "/heat rate/ca_almanac_R.tsv"), header=TRUE, sep ="\t")
 cap.eia = cap.eia %>%
-  select(year, in_service, plant_code, overnight_category, fuel_1_general, heat_rate, summer_capacity)
+  select(year, in_service, plant_code, overnight_category, fuel_1, heat_rate, summer_capacity)
 # source: ca_almanac_R.r
 
 plant.capacity = cap.eia %>%
@@ -213,8 +212,9 @@ summary.cap.eia.year = summary.cap.eia.year %>%
   mutate(adj.fuel.price = adj.fuel.price*1000)
   # Convert units from dollars per kWh to dollars per MWh (done this way for readability)
 
+# save files --------------------------------------------------------------
+
 gz1 = gzfile(paste(path_data,"summary_files.txt.gz", sep=""), "w")
 write.table(summary.cap.eia.year, file = gz1, sep="\t",col.names = TRUE, row.names = FALSE)
 close(gz1)
-# Output the cleaned up data to the data folder as a .txt.gz file
 

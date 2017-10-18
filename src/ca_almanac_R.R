@@ -1,4 +1,6 @@
-######## match CA plant codes w/ EIA plant codes ######## 
+
+# match CA plant codes w/ EIA plant codes ---------------------------------
+
 ca.mapping = read.table(paste0(path_data, "/heat rate/ca.mapping.tsv"), header=TRUE, sep="\t")
 # Source: http://www.energy.ca.gov/almanac/electricity_data/web_qfer/, 'Power Plant ID Cross Reference Table.xls'
 # Dataset that maps the unique identifier in the CA dataset to the EIA identification system
@@ -11,7 +13,9 @@ ca.mapping = ca.mapping %>%
   select(plant.id, plant_code) #CA Energy Commision ID && EIA Plant Code #'s
 
 
-######## store plant heat rates ######## 
+
+# store plant heat rates --------------------------------------------------
+
 ca.elec.almanac = read.table(paste0(path_data, "/heat rate/ca.elec.almanac.tsv"), header=TRUE, sep="\t")
 # source? http://www.energy.ca.gov/almanac/electricity_data/web_qfer/Heat_Rates.php
 # contains heat rate, fuel consumption, and energy production data
@@ -26,9 +30,10 @@ ca.elec.almanac = ca.elec.almanac %>%
   filter(year != 2015)
 
 
-######## update EIA plant information w/ CA heat rate data ######## 
+# update EIA plant information w/ CA heat rate data -----------------------
+
 cap.eia = read.table(paste0(path_data, "/heat rate/mapping_860_overnight_R.tsv"), header=TRUE, sep ="\t")
-# source unknown
+# mapping_860_overnight.R
 # contains fuel and overnight_category information, as well as heat rate data
 cap.eia = cap.eia %>%
   mutate(heat_rate = replace(heat_rate, heat_rate == 0, NA)) %>%
@@ -42,8 +47,17 @@ imp.cols = names(cap.eia)[match(c("year", "plant_code", "overnight_category", "h
 unimp.cols = names(cap.eia)[!(names(cap.eia) %in% imp.cols)]
 cap.eia = arrange(cap.eia[ , c(imp.cols, unimp.cols)])
 
+# how many plants' heat_rate is replaced with ca.elec.almanac?
+cap.eia <- ca.eia %>%
+  mutate(heat_rate = replace(heat_rate, heat_rate == 0, NA)) %>%
+  left_join(ca.elec.almanac, by=c("plant_code", "year")) %>% 
+  filter(is.na(heat_rate) & ! is.na(heat.rate))
+nrow(cap.eia)
+# compare datasets --------------------------------------------------------
 
-######## save file ######## 
+
+
+# save file ---------------------------------------------------------------
 gz1 = gzfile(paste(path_data,"/heat rate/ca_almanac_R.tsv", sep=""), "w")
 write.table(cap.eia, file = gz1, sep="\t",col.names = TRUE, row.names = FALSE)
 close(gz1)
