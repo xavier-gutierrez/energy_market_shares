@@ -1,0 +1,741 @@
+\documentclass[10pt]{report}
+\usepackage{graphicx} 
+\usepackage{tabu}
+\usepackage[draft]{hyperref} 
+% without [draft] this was happening http://tex.stackexchange.com/questions/148411/url-in-footnote-spans-two-pages
+% seems to be a bug between hyperref and tabu (need to load hyperref after tabu)
+\usepackage{amsmath}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{endnotes}
+\usepackage{verbatimbox}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{geometry}
+\usepackage{float} % necessary for placement of figures
+\usepackage[style = authoryear, sorting = nyt, backend = biber]{biblatex}
+% \addbibresource[location = local, type = file]{C:/Users/bloh356/Google Drive/Library/Library.bib}
+\addbibresource[location = local, type = file]{/Users/bloh356/Google Drive/Library/Library.bib}
+\graphicspath{{./figures/}}
+
+\title{Data processing: Multinomial logit regression model}
+\author{Andrew Blohm}
+\date{\today}
+\begin{document}
+\maketitle
+
+\chapter{Introduction}
+In this document we document the steps necessary to create the multinomial logit dataset. 
+For the multinomial dataset we would like a data set that contains a column with the positive change in capacity for each fuel and primary mover combination, the heat rate adjusted fuel price data, marginal cost of operation data (for renewable resources and hydro), and overnight capital cost data. 
+
+There are several available means to complete the data processing, as well as some alternative to increase the quality of the data set (each with a varying degree of effort required):
+\begin{enumerate}
+\item 
+\item Overnight costs estimates currently run from 1997 to present and are derived from the supplemental tables of the Annual Energy Outlooks (AEOs). 
+Ignoring for the moment a discussion of the quality of the the data, we could supplement the AEO estimates with other data sources including trends in fossil fuel and nuclear power plant overnight costs from available cost indexes (see Chapter \ref{overnight} for more discussion of available data sources), as well as wind cost estimates from Figure 8 in \cite{bolinger2009wind}. 
+\item Incorporate criticisms from the literature of AEO overnight cost estimates 
+\item Incorporate theoretical heat rate limits into the regression model for technologies that presently lack them
+\item \sout{Further analysis of the linear regression model, specifically, where we might be abusing the sample sizes, additional variables, etc.
+Some of the predicted values are pretty wonky.} 
+\begingroup
+\color{red} 
+The simple linear regression model with heat rate as a function of time was having trouble with immature technologies (i.e., biomass).
+These technologies experienced a period with rapid changes in efficiency before then experiencing a period with slower changes.  
+We added the nonlinear term, which improves the fit. 
+For some technologies there is a large discrepancy between the 1990 to 1995 EIA Form 860 data and the California Almanac data for 2001 to 2015 that the model has a hard time fitting (i.e., biomass)
+\endgroup
+\item Marginal cost estimates for biomass, uranium, \ldots
+\item Heat rate data missing for combined cycle (coal), combustion turbine (coal) 
+\item \sout{Use the annual capacity additions data in place of the difference in MW installed summer capacity data (retirements hide capacity additions).}
+\begingroup
+\color{red}
+We incorporated the retirement date into the analysis by subtracting retired assets from the total installed summer capacity before taking the difference between years (i.e., year - lag(year)). 
+In this way, the dependent variable for the analysis now contains our best guess at capacity additions by primary fuel and production technology for each year. 
+\endgroup
+\item \ldots
+\end{enumerate}
+
+The remainder of the document describes the process for creating the data set for the discrete choice model.
+
+
+\newpage
+\newgeometry{margin=0.5cm}
+\begingroup	
+\begin{scriptsize}
+\begin{landscape}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|lllllllll|}
+\caption{Data sources by production technology and primary fuel} \\
+\hline 
+\textbf{Year} & \textbf{Biomass} & \textbf{Coal} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CT} \\
+ & \textbf{biomass} & \textbf{coal} & \textbf{biomass} & \textbf{coal} & \textbf{kerosene} & \textbf{ng} & \textbf{oil} & \textbf{coal} \\
+\hline
+\endfirsthead
+\multicolumn{9}{c}%
+{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\hline
+\textbf{Year} & \textbf{Biomass} & \textbf{Coal} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CC} & \textbf{Conv CT} \\
+ & \textbf{biomass} & \textbf{coal} & \textbf{biomass} & \textbf{coal} & \textbf{kerosene} & \textbf{ng} & \textbf{oil} & \textbf{coal} \\
+\hline 
+\endhead
+\hline \multicolumn{9}{r}{\textit{Continued on next page}} \\
+\endfoot
+%%
+\hline \\
+%% biomass
+1990 & \shortstack{Heatrate (Form 860)\footnote{EIA Form 860 provides generator level heat rate data} \\ Capacity (Form 860)\footnote{Chapter \ref{ch_mapping} contains more information on the data processing and assumptions undertaken here.}} &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)\footnote{Energy prices for fossil fuels are from the Electric Power Monthly. More information is available in Chapter \ref{ch_fuelcost}}} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)\footnote{Energy prices for fossil fuels are from the Electric Power Monthly. More information is available in Chapter \ref{ch_fuelcost}}} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)\footnote{Energy prices for fossil fuels are from the Electric Power Monthly. More information is available in Chapter \ref{ch_fuelcost}}} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)\footnote{Energy prices for fossil fuels are from the Electric Power Monthly. More information is available in Chapter \ref{ch_fuelcost}}} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)\footnote{Energy prices for fossil fuels are from the Electric Power Monthly. More information is available in Chapter \ref{ch_fuelcost}}}\\
+\hline \\
+%% biomass
+1991 & \shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} \\
+\hline \\
+%% biomass
+1992 & \shortstack{Heatrate (Form 860) \\ Capacity (Form 860)}  &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)}\\
+\hline \\
+%% biomass
+1993 & \shortstack{Heatrate (Form 860) \\ Capacity (Form 860)}  &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} \\
+\hline \\
+%% biomass
+1994 & \shortstack{Heatrate (Form 860) \\ Capacity (Form 860)}  &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} \\
+\hline \\
+%% biomass
+1995 & \shortstack{Heatrate (Form 860) \\ Capacity (Form 860)}  &
+%% coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Heatrate (Form 860) \\ Capacity (Form 860) \\ Energy price (EIA)}\\
+\hline \\
+%% biomass
+1996 & Capacity (Form 860) &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} \\
+\hline \\
+%% biomass
+1997 & \shortstack{Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal 
+\shortstack{Capacity (Form 860) \\ Coal plant overnight cost (AEO) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} \\
+\hline \\
+%% biomass
+1998 & Capacity (Form 860) &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)}  \\
+\hline \\
+%% biomass
+1999 & \shortstack{Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Coal price (EIA)} &
+%% conv cc biomass
+\shortstack{Capacity (Form 860)} &
+%% conv cc coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc kerosene
+\shortstack{Capacity (Form 860)} &
+%% conv cc ng
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv cc oil
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)} &
+%% conv ct coal
+\shortstack{Capacity (Form 860) \\ Energy price (EIA)}  \\
+\hline \\
+%% biomass 
+2000 & \shortstack{Capacity (Form 860) \\ Biomass overnight cost (AEO) } &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Coal price (EIA)} & \\
+\hline \\
+%%biomass
+2001 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal
+\shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Energy price (EIA)} & \\
+\hline \\
+%% biomass
+2002 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)}  &
+%% coal
+\shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Coal price (EIA) } & \\
+\hline \\
+%% biomass
+2003 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)}  &
+%% coal
+\shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2004 & \shortstack{Heatrate (CA Almanac) \\Capacity (Form 860) \\ Biomass overnight cost (AEO)}  &
+%% coal
+\shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Coal overnight cost (AEO) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2005 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)}  &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal price (EIA) \\ Coal overnight cost (AEO)} & \\
+\hline \\
+%% biomass
+2006 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal price (EIA) \\ Coal overnight cost (AEO)} & \\
+\hline \\
+%% biomass
+2007 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal
+\shortstack{Capacity (Form 860) \\ Coal price (EIA) \\ Coal overnight cost (AEO)} & \\
+\hline \\
+%% biomass
+2008 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO)} &
+%% coal
+\shortstack{Coal overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2009 & \shortstack{Heatrate (CA Almanac) \\ Capacity (Form 860) \\ Biomass overnight cost (AEO) } &
+%% coal
+\shortstack{Coal overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2010 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2011 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2012 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2013 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2014 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\hline \\
+%% biomass
+2015 & \shortstack{Overnight cost (AEO) \\ Heatrate (CA Almanac) \\ Capacity (Form 860)} &
+%% coal
+\shortstack{Coal plant overnight cost (AEO) \\ Capacity (Form 860) \\ Coal price (EIA)} & \\
+\\
+
+\hline 
+\end{longtable}
+\end{center}
+\end{landscape}
+\end{scriptsize}
+\endgroup
+\newpage
+\restoregeometry
+
+
+\chapter{Merging EIA overnight cost estimates with Form 860 generator level data}\label{ch_mapping}
+In this section we discuss the process used to merge information from the EIA overnight cost assumptions for electricity production plants with generator level data from the EIA Form-860 survey.  
+We discuss the time dimension of the overnight costs in subsequent chapters. 
+The result of this work is a dataset to be used in the multinomial logit.
+
+\section{Overnight cost data}
+The overnight cost data used in this analysis comes from the US Energy Information Administration (EIA) annual energy outlook (AEO) series, specifically the underlying assumptions on characteristics of new and existing power plants. 
+Each annual energy outlook estimates the characteristics of new generating plants, including operational characteristics and cost assumptions.
+We use the overnight capital cost assumptions from each AEO to approximate the investment cost for each technology in each year of the analysis.
+The earliest AEO for which the overnight cost is available is the 1997 AEO; having been published in each subsequent year.
+However, as new technologies emerge and existing technologies evolve the categories within the overnight cost database have necessarily changed. 
+Therefore, the database does not have consistent categories over time. 
+
+\section{EIA Form EIA-860 (plant level electricity sector data)}
+The EIA uses the survey form EIA-860 to collect generator level data on existing and planned power plants with an installed capacity greater than 1 MW. 
+Form EIA-860 compiles information on the utility, plant, and generator for each of the generators, including information on environmental regulation compliance, ownership structure, etc.  
+Of particular interest to the study is the plant level dataset, which amongst other information contains capacity, installation date, operating status, primary fuel, and technology use at a disaggregated scale not found elsewhere.
+However, the technology categories available in the Form EIA-860 do not readily map onto the overnight cost technology categories. 
+In the next section, we discuss the mappings that we employ and the reasoning behind those. 
+
+The units of the installed summer capacity are not consistent across the years of the survey with some misspecified. 
+For the EIA Form-860 years 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, and 2014 the summer capacity of each generator is in MW (and correctly identified as such). 
+However, for EIA Form-860 years 1998, 1999, and 2000 the summer capacity is in kW despite the accompanying documentation stating the units as MW. 
+Only EIA Form-860 for the years 1990, 1991, 1992, 1993, 1994, 1995, 1996, and 1997 has the summer capacity correctly listed as kW. 
+To address the issue we convert all values of the installed summer capacity to MW.
+
+The data also includes negative values in the summer capacity field. 
+We change the negative values for utility code 13756, plant code 996, generator unit 9C and 9B from negative to positive, as it looks like it might have been an input error.
+We do the same for utility code 15263, plant code 6545, generator 2 for the same reason.
+
+\section{Mappings}
+There are 37 prime movers (i.e., power production technologies) and 78 primary fuels in the Form EIA-860 database, which together form 190 unique, pair-wise combinations that need to be mapped to the overnight cost database. 
+The issue is that the overnight cost database has between 15 and 20 overnight cost categories from which to choose; the exact number of categories fluctuates year-to-year.
+In this section, we identify the mapping selections that we made and expound on the assumptions underlying them.
+We work from the more obvious to the less clear mappings.
+
+The categorization below results in 595 unassigned generators  with a total installed summer capacity of 0.0139 TW.
+The uncategorized generators are from two prime mover categories: turbines used in binary cycles (BT) and steam turbines (ST) with their primary fuel either purchased steam (PUR), steam (STM), waste wood liquids (WDL) or waste heat (WH).
+
+It is important to remember that an individual generator might show up in each year of the EIA Form-860, which means that it could be counted 24 times.
+For this reason, the total installed summer capacity that we calculate for each prime mover (i.e., technology) could be extremely high. 
+
+\subsubsection{Missing or incomplete records}
+There are a few categories that either don't have enough information for assignment (or would require too much effort to do so). 
+First, we ignore the prime mover designation CG as it is undefined by the survey (3 natural gas fired CG plants with an installed summer capacity of 0.33 TW over the period of analysis).
+
+Second, we ignore the prime mover designation other (OT) and primary fuel other (OTH) because the cost of determining how to allocate these resources is too high, as compared to the benefit (i.e., it would require reading the notes for approximately 575 generators with an installed capacity of 0.069 TW over the period of analysis).
+
+Third, we ignore any generator without an identified primary fuel, except in the case of hydro power technology, where the choice of fuel is obvious.
+There are 6 non-hydro generators with an installed summer capacity of 0.096 TW that do not presently have a primary fuel listed.
+
+Fourth, we ignore the primary fuel code WOC, which is not defined in any of the supporting literature. 
+There are 12 generators with a total installed summer capacity of 0.30 TW with a primary fuel WOC.   
+
+Finally, we ignore the multi-fueled generators (MF) given that the database doesn't indicate the set of fuels that they are using.
+There are 21 generators with a total installed summer capacity of 0.635 TW. 
+
+In total we drop from the dataset 617 units, with an installed summer capacity of 1.43 TW or approximately 0.0001\% of total installed summer capacity for all generators across the period of analysis.
+
+\subsubsection{Hydropower}
+The overnight cost dataset includes one cost estimate for conventional hydropower.
+We assume that all of the production technologies with water (WAT) listed as the primary fuel can be mapped to the hydropower investment cost.
+These include prime mover designations hydraulic turbines - conventional (HC), hydraulic turbine - pipeline (HL), hydraulic turbine - reversible (HR), hydraulic turbine - conventional (HY), and hydraulic turbine reversible - pumped storage (PS). 
+We also map these production technologies to the hydro power investment cost even in cases where the primary fuel column entry is missing. 
+There are 90,163 hydropower generators in the dataset with a total installed summer capacity of approximately 2.433 TW for the period of analysis. 
+
+\subsubsection{Geothermal}
+The overnight cost dataset includes one cost estimate for geothermal power plants. 
+We assign the geothermal overnight cost to any generator with geothermal (GEO) or geothermal steam (GST) as a primary fuel. 
+This includes prime mover designations: turbines used in binary cycles (BT), other (OT), steam turbine - geothermal (GE), and steam turbine - boiler (ST).  
+This categorization moves one plant type from other (OT) to geothermal. 
+There are 3,269 geothermal generators in the dataset with a total installed summer capacity of approximately 0.0505 TW over the period of analysis. 
+
+\subsubsection{Photovoltaic}
+The overnight cost dataset includes one cost estimate for photovoltaic power plants.
+We assign the photovoltaic overnight cost to both prime mover designations: photovoltaic (PV) and photovoltaic (SP) in the Form EIA-860 dataset.
+There are 3,460 photovoltaic generators in the dataset with a total installed summer capacity of approximately 0.0185 TW over the period of analysis. 
+
+\subsubsection{Solar thermal}
+The overnight cost dataset includes one cost estimate for solar thermal power plants. 
+We assign the solar thermal overnight cost to any generator with sun (SUN) as the primary fuel and a prime mover designation that is not photovoltaic (PV or SP).
+This includes other (OT), steam turbine - solar (SS), and concentrated solar power energy storage (CP) generators.
+This categorization moves one plant type from prime mover other (OT) to solar thermal.   
+There are 170 solar thermal generators in the dataset with a total installed summer capacity of approximately 0.008 TW over the period of analysis.
+
+\subsubsection{Wind}
+The overnight cost dataset has two cost estimates for wind (i.e., onshore and offshore).
+However, we do not have this level of specificity in the Form EIA-860 dataset but we do know that most of the installed capacity in the US has been in onshore wind capacity. 
+Therefore, we assign the onshore wind overnight cost to the wind turbine (WT) generator. 
+There are 7,732 wind generators in the dataset with a total installed summer capacity of approximately 0.3845 TW over the period of analysis. 
+
+\subsubsection{Nuclear}
+The overnight cost dataset includes one cost estimate for nuclear power plants.
+We assign the nuclear power overnight cost to any generator using nuclear (NUC), uranium (UR), plutonium (PT), or thorium (TH) as the primary fuel.  
+This includes steam turbine - boiling water nuclear reactor (NB), steam turbine - graphite nuclear reactor (NG), steam turbine - high-temperature gas-cooled nuclear reactor (NH), and steam turbine - pressurized water nuclear reactor (NP).
+There are 2,450 nuclear generators in the dataset with a total installed summer capacity of approximately 2.2813 TW.
+
+\subsubsection{Fuel cells}
+The overnight cost dataset has one cost estimate for fuel cells.
+We assign the overnight cost estimate for fuel cells to fuel cell - electrochemcial (FC). 
+In the Form EIA-860 dataset the fuel cell plants use landfill gas (LFG), natural gas (NG), and other biomass gases (OBG) as there primary fuel. 
+There are 273 fuel cell generators in the dataset with a total installed summer capacity of 0.000284 TW.
+
+\subsubsection{Biomass}
+The overnight cost dataset includes one cost estimate for biomass power plants. 
+The DOE assumes that woody residues, round wood and woody energy crops, municipal solid wastes, wet herbaceous residues, and dry herbaceous residues and energy crops are all biomass feedstocks Source: \url{http://www.energy.gov/eere/bioenergy/biomass-feedstocks}. 
+However, given that MSW is its own category in the overnight cost we assign that to its own overnight cost.
+We assign all non-combined cycle plants with the following primary fuels to the biomass overnight cost, biomass generic (BIO), other biomass solids (OBS); refuse, bagasse and all other non-wood waste (REF); wood and wood waste (WD), and wood waste solids (WDS). 
+This categorization moves one plant from the internal combustion category to the biomass category and, two plant types from other to biomass (i.e., (OT, REF) and (OT, WDS)). 
+There are 3,113 biomass generators in the dataset with a total installed summer capacity of 0.0521 TW. 
+
+\subsubsection{Municipal solid waste}
+The overnight cost dataset includes one cost estimate for municipal solid waste power plants.
+We assign all plants with municipal solid waste (MSW) as the primary fuel to that overnight cost. 
+There are 1,383 municipal solid waste generators in the dataset with a total installed summer capacity of  0.03196 TW. 
+
+\subsubsection{Distributed generation}
+The overnight cost dataset includes two cost estimates for distributed generation: peak and non peak.
+We assign all generators with megawatt hour (MWH) as the primary fuel to peak distributed generation (i.e,. battery energy storage (BA) and flywheel energy storage (FW)). 
+In addition, we assign generators with compressed energy storage (CE) prime mover designation.
+There are 81 distributed generators in the dataset with a total installed summer capacity of 0.002875 TW. 
+
+\subsubsection{Steam turbines}
+Gas-oil steam turbines exist as a category for the 1997 to 2000 AEOs. 
+We assign all steam turbine plants that use either, any form of natural gas or fuel oil to this overnight cost estimate. 
+On the natural gas side this includes landfill gas (LFG), synthetic natural gas (SNG), other gas (OG), natural gas (NG), liquified propane gas (LPG), blast furnace gas (BFG), black liquor (BLQ) (gasified before use), and other biomass gases (OBG). 
+We assume that some data entry mistakes were made in the process of inputing the survey in that BL should have been BLQ.
+This change affects 7 generators.  
+On the oil side this includes black liquor (BLQ), distillate fuel oil (DFO), fuel oil 1-6 (FO1 - FO6), residual fuel oil (RFO), oil-other and waste oil (WO), coal synfuel (SC), residual fuel oil (RFO), and sludge waste (SLW).
+There are a total of 25,341 steam turbine generators in the dataset with a total installed summer capacity of 3.2086 TW.  
+
+\subsubsection{Combined cycle generators}
+The EIA has overnight cost estimates for conventional and advanced gas-oil combined cycle.
+However, the EIA Form-860 dataset does not include the information necessary to delineate between the two alternatives.\footnote{There might be an average size difference that could be used to assign the Form-860 combined cycle plants to the advanced and conventional categories.}
+The prime mover designations in the Form-860 dataset include the combined cycle - total unit (CC), combined cycle combustion turbine part (CT), combined cycle single shaft - gas turbine and steam turbine (CS), combined cycle steam turbine - waste heat boiler (CW), and the combined cycle steam turbine with supplemental firing (CA). 
+The cost estimates in the overnight cost database are for an oil and gas unit however, some of the CT, CC, CA, use purchased steam (PUR), bituminous coal (BIT), or wood and wood waste solids (WDS) as their primary fuel.  
+We don't have enough information to assign these plants to anything but the combined cycle overnight cost. 
+There are a total of 24,297 combined cycle generators in the dataset with a total installed summer capacity of 2.6571 TW. 
+
+\subsubsection{Combustion turbines}
+The EIA overnight cost estimates for combustion turbines once again include both an advanced and conventional option. 
+One option is to use the conventional turbine overnight cost for all of the combustion turbine plants in the Form EIA-860 dataset. 
+This includes combustion (gas) turbine (GT), internal combustion (IC), and jet engine (JE).
+There are 156,670 combustion turbine generators in the dataset with a total installed summer capacity of  2.575 TW. 
+For the time being we assume that all of them are conventional combustion turbines. 
+At some future point (with more time) we might be able to use the average size of an advanced versus conventional combustion turbine to improve upon this assumption. 
+
+\subsubsection{Integrated coal gasification generators}
+The EIA overnight cost dataset includes two overnight cost estimates for the integrated coal gasification plant; with and without carbon capture and storage (CCS). 
+We assume that all IGCC plants built to date do not include the CCS option. 
+Therefore, we assign the overnight cost for the IGCC without CCS to all IGCC plants in the Form EIA-860 dataset. 
+There are a total of 13 IGCC generators in the dataset with a total installed summer capacity of 0.00203 TW. 
+
+\subsubsection{Coal generators (not IGCC)}
+The EIA overnight cost dataset includes a few coal power plant options. 
+In the 1997 AEO there is one coal power plant option; pulverized coal power plants.
+In the 1999 AEO there is a scrubbed coal new option. 
+In the 2001 AEO the coal option is the conventional pulverized coal power plant.
+Despite the changes in the name of the plant each of these plants has similar characteristics (i.e., cost, etc.).
+Therefore, we assign all coal fired plants bituminous coal (BIT), subbituminous coal (SUB), lignite (LIG), anthracite (ANT), coal generic (COL), refined coal (RC), and waste coal (WC), which are not IGCC (IG), combined cycle, or combustion turbine power plants to the coal power plant overnight cost (of varying name).
+Online resources suggest that petroleum coke is used primarily in steam turbine, coal-fired power plants so we assign the petroluem coke (PC) primary fuel plants to the coal plants as well.  
+Online resources suggest that tire derived fuel (TDF) are primarily used as an additive in coal plants. 
+There are a total of 33,126 coal generators in the dataset with a total installed summer capacity of 7.5244 TW. 
+
+\chapter{Heat rate}
+The marginal cost of producing power not only depends on the price of fuel but also the efficiency of the production process (i.e., how much fuel is required to produce 1 kWh of electricity). 
+To correct the cost of the input fuel for the efficiency of the conversion technology we first need to know the efficiency of the production technology.
+The heat rate is a commonly used measure to assess the efficiency of a power plant in turning fuel into electricity. 
+The equation for the heat rate is Heat rate $(\frac{BTU}{kWh})$ = $\frac{Input\ energy (\frac{BTU}{hr})}{Output\ power (kW)}$.\footnote{The heat rate statistic is meaningful statistic for fossil fuel-fired and nuclear power generators only.}  
+Once we have the heat rate we can also calculate power plant efficiency, as the equivalent Btu content of a kWh of electricity divided by the heat rate, which changes the units to an efficiency percentage.
+The heat rate can be converted to a thermal efficiency by dividing the equivalent BTU content of a kWh (i.e., 3,412 BTU) by the heat rate.
+In this section, we discuss the data sources available and interpolation methods required to accomplish this. 
+
+\section{Data sources}
+The EIA Form 860 does not have a complete record of heat rates for each generator over the entire period of analysis. 
+Instead, it has generator level, heat rate data for the period 1990 to 1995. 
+Another source of heat rate data is the publicly available California energy almanac.
+In July of 2007 the California Energy Commission adopted the Quarterly Fuel and Energy Report (QFER) requirement, which provided for the collection of information concerning electric generation, amongst other data \parencite{cec2016}. 
+The energy almanac contains plant level (i.e., one level higher than generator), heat rate data for the period 2007 to present for all resources located in the state.  
+To make this point more explicit, the heat rate values from the energy almanac are plant level averages (i.e., average of all generators at the plant), whereas the heat rate data in Form 860 for the period 1990 to 1995 are generator level data.   
+
+Unfortunately, the California energy almanac and the EIA use different unique identifier systems for the identification of power units. 
+While documentation is available that maps the identifiers between the two systems; there are approximately 500 units in the energy almanac where an equivalent EIA identifier is not listed.\footnote{The identifier table, which bridges the CA energy almanac and EIA Form 860 can be found here \url{http://energyalmanac.ca.gov/electricity/web_qfer/}.} 
+As a result, we cannot map these entries to our EIA Form 860 database, and they are subsequently ignored.
+In addition 6 plants with a mapping had plant codes that were subsequently, not found in the EIA database.\footnote{Plant codes: 10780, 16657,50786, 55105, 56508, 101694.}
+
+We merge the two data sets using the plant code variable. 
+The EIA Form 860 has 8,716 unique plant codes over the entire period of record.
+For the period 1990 to 1995 there are 3,339 unique plant codes of which 1,953 are fossil fuel generators (i.e., primary fuel of coal, natural gas, oil, propane, biomass, or kerosene).
+Of this set, we have heat rate data (i.e., non zero and non missing) for 87\% of the entries.
+
+The California energy almanac has plant level heat rate data beginning in 2001 until present.
+The EIA Form 860 has 8,082 unique plant codes for this period of record, of which, 4,421 plants are fossil fuel generators (i.e., primary fuel of coal, natural gas, oil, propane, biomass, or kerosene).
+Of this set, we have heat rate data for 10,714 entries (~ 7\% of all entries for this period). 
+Once again, it is important to note that the California energy almanac data represents plant level average heat rate, instead of the generator heat rate found in the EIA Form 860 for the years 1990 to 1995. 
+
+Table 5 of Matteo's paper \cite{} contains the maximum achievable efficiency for 2050 and 2100.
+The data includes theoretical limits in addition to predicted efficiency for 2015, 2050, and 2100 for conventional combined cycle, IGCC, conventional combustion turbines, biomass, and steam turbines. 
+We convert the efficiency of each unit into a heat rate using the BTU equivalent of 1 kWh of electricity 3,412 BTU.
+We use these values in the regression to moderate any large short term changes.
+We could spend more time looking for these values for the remaining overnight categories.
+One issue of note, that we should look into is coal.
+Recent data suggests that coal is deviating sharply from the theoretical heat rates (perhaps pollution control technologies?).
+
+Two additional sources of heat rate data are available but do not contain generator level data (i.e., provide heat rates for various aggregations of production technology or primary fuel): the underlying assumptions of the Annual energy outlook (AEO) and the Electric Power Annual.\footnote{Archived AEO's and supplementary tables are available at  \url{https://www.eia.gov/forecasts/aeo/archive.cfm}.}
+The AEO makes assumptions about the present state of technology both in cost (i.e., investment and marginal costs), as well as efficiency (i.e., heat rate) for purposes of incorporation into the NEMS modeling framework \parencite{eiaaeo2016}.
+Usually, two heat rates are provided in the supplementary data tables: the heat rate in that year and the nth of its kind heat rate. 
+The difference between the two values is a function of technological maturity.
+In the case of a new technology we would expect the two values to be further apart than in the case of an established power production technology. 
+
+Finally, the Electric Power Annual provides an aggregated heat rate statistic by fuel type for the entire period of analysis. 
+The average operating heat rate for selected energy sources averages across conversion technology by fuel type.
+As a result, it is too aggregated to be used outside of a check on our interpolation methods (detailed below). 
+
+\section{Aggregating primary fuel source values}
+The EIA Form 860 data has a finer resolution than the available input fuel price data (i.e., EIA tracks power plant spending for coal, oil and natural gas); meanwhile, the primary fuel category has 60 unique values.
+For example, we have a single price for coal available in the Electric Utility Receipts of and Average Cost for Fossil Fuels Table \parencite{}(EIA Power Monthly) while EIA Form 860 has 10 possible coal primary fuel designations.   
+
+While it may seem odd to discuss the fuel price data in the heat rate section, it is possible to increase the sample size of the linear regression model (and generally stop abusing our data) that we implement to predict the missing heat rate values for the period 1996 to 2014, if we preprocess the data by aggregating the existing primary fuel categories to the available primary fuel price data.
+
+We initially ran the regression for each unique prime mover, primary fuel pairing (~190 unique pairings). 
+However, as might be expected, we don't have the degrees of freedom necessary to have any certainty in the output for a number of the pairings. 
+Through aggregation we can increase our sample size and address this issue.
+In this section, we discuss the aggregation of the EIA Form 860 values to the available fuel price data.
+Each primary fuel is accompanied by three values: total installed capacity, number of units, and the average age of the units.
+ 
+\subsection{Renewables}
+We map the following primary fuels to their respective marginal costs associated with the renewable primary mover technology in the AEO supplementary tables discussed previously: geothermal (GEO)(4,945 MW, 393 units, 12 years old), geothermal (GST)(1,934 MW, 37 units, 11 years old), solar (SUN)(12,086 MW, 1,396 units, 1 years old), water (WAT)(139,482 MW, 6,574 units, 47 years old), and wind (WND)(76,160 MW, 1,488 units, 3 years old). 
+
+\subsection{Biomass}
+We map the following primary fuel categories to biomass: agriculture crop byproducts, straw, energy crops (AB)(605 MW, 44 units, 17 years old), other biomass solids (OBS)(213 MW, 9 units, 11 years old), refuse, bagasse, and all other nonwood waste (REF)(369 MW, 28 units, 24 years old), wood and wood waste (WD)(403 MW, 20 units, 33 years old), and wood and wood waste solids (WDS)(6,756 MW, 370 units, 20 years old). 
+At this time we don't have price data for biomass as an input. 
+
+\subsection{Natural gas}
+We map the following primary fuel categories to natural gas: landfill gas (LFG)(3,268 MW, 2,436 units, 5 years old), methane (MTE)(3.4 MW, 5 units, 0 years old), natural gas (NG)(835,301 MW, 11,235 units, 16 years old), other biomass gases (OBG)(466 MW, 286 units, 6.3 years old), synthetic natural gas (SNG)(360 MW, 4 units, 15 years old), synthetic gas other than coal derived (SG)(274 MW, 2 units, 37 years old), coal-derived synthetic gas (SGC)(1,110 MW, 7 units, 29 years old), and synthetic gas from petroleum coke (SGP)(274 MW, 2 units, 38 years old). 
+
+\subsection{Oil}
+We map the following primary fuel categories to oil prices: distillate fuel oil (DFO)(51,917 MW, 5,911 units, 22 years old), no 1 fuel oil (FO1)(497 MW, 404 units, 9 years old), no 2 fuel oil (FO2)(39,625 MW, 3,880 units, 24 years old), no 4 fuel oil (FO4)(713 MW, 21 units, 21 years old), no 5 fuel oil (FO5)(6.7 MW, 2 units, 43 years old), no 6 fuel oil (FO6)(56,508 MW, 351 units, 33 years old), other biomass liquids (OBL)(127 MW, 6 units, 7 years old), residual fuel oil (RFO)(71,157 MW, 419 units, 38 years old), and, oil other and waste oil (WO)(252 MW, 48 units, 11 years old).
+
+\subsection{Kerosene}
+We map the following primary fuel categories to kerosene prices: jet fuel (JF)(2,413 MW, 158 units, 19 years old) and kerosene (KER)(6,880 MW, 198 units, 27 years old). 
+
+\subsection{Coal}
+We map the following primary fuel categories to coal: anthracite (ANT)(259 MW, 4 units, 37 years old), bituminous coal (BIT)(358,505, 2,132 units, 33 years old), coal generic (COL)(13.5 MW, 2 units, 39 years old), lignite (LIG)(37,109 MW, 87 units, 22 years old), petroleum coke (PC)(3,821 MW, 71 units, 24 years old), subbituminous coal (SUB)(189,947 MW, 719 units, 30 years old), waste coal (WC)(3,436 MW, 36 units, 17 years old), refined coal (RC)(1,197 MW, 5 units, 41 years old), and coal synfuel (SC)(9,525 MW, 30 units, 38 years old). 
+
+\subsection{Nuclear}
+We map the following primary fuel categories to uranium fuel prices: nuclear (NUC)(174,209 MW, 183 units, 22 years old) and uranium (UR)(110,000 MW, 124 units, 12 years old). 
+We assume that both primary fuel categories use uranium as the primary fuel source given expert elicitation (check with Sonny to satisfy the expert elicitation).
+
+\subsection{Unassigned and potentially ignored}
+We are unsure of how to map the following primary fuels to the available fuel price data: multi-fueled (MF)(209 MW, 7 units, 49 years old), municipal solid waste (MSW)(3,426 MW, 154 units, 15 years old), black liquor (BLQ)(6,570 MW, 306 units, 34 years old), liquified propane (LPG)(374.5 MW, 8 units, 19 years old), steam (STM)(61 MW, 3 units, 52 years old), waste heat (WH)(25,270 MW, 436, 16.5 years old), purchased steam (PUR)(652 MW, 33 units, 35 years old), sludge waste (SLW)(15 MW, 9 units, 10 years old), tires (TDF)(189 MW, 8 units, 9.5 years old), wood waste liquids (WDL)(125 MW, 8 units, 36 years old), blast furnace gas (BFG)(2,236 total MW, 65 units, 45 years old), other gas (OG)(3,694 MW, 178 units, 29 years old), and refinery gas (RG)(52 MW, 3 units, 10 years old). 
+Not considering the undefined primary fuel categories (undefined meaning either doesn't exist in the documentation, missing data, or not available), discussed earlier, the total installed MW ignored is 35,800 MW (~ 2\% of total installed summer capacity).\footnote{Waste heat is far and away the largest portion of the unassigned category.} 
+
+\subsection{Ignored categories}
+We ignore the following primary fuel categories because there are no units in the data set using these fuels: biomass generic (BIO), gas generic (GAS), re refined motor oil (RRO), topped crude oil (TOP), petroleum generic (PET), no 3 fuel oil (FO3), crude oil (CRU), coal oil mixture (COM), propane (PRO), coal water mixture (CWM), plutonium (PL), thorium (TH), coke oven gas (COG), liquefied natural gas (LNG), and methanol (MTH). We also ignore propane (PG)(2.5 MW, 25 units, 0 years old), which does have a very small amount of installed capacity. 
+
+\section{Interpolation of missing heat rate values}
+We use a simple linear regression model to identify any trends that exist for the available heat rate data (i.e., 1990-1995) and project it forward for each subgrouping (i.e., prime mover and primary fuel). 
+There appear to be data entry errors, resulting in outlier heat rate values for two categories in the data; steam turbine using type four fuel oil (FO4) and biomass plants using refuse, bagasse and all other non-wood waste (REF). 
+
+In 1993 the average heat rate for the 3 steam turbines using FO4 is 16,200, which is 2.04 standard deviations from the mean heat rate (~12,670). One explanation is that the number of plants that year drops from six in the previous year to three. However, this value seems to high as compared to other information we have for the period 2007 to 2014. Similarly, for the biomass plants using REF, in 1993 the average heat rate is 5,000, which is also approximately 2.04 standard deviations from the average heat rate for this type of plant (~9760). 
+
+In both these cases we remove the outlier values so that the linear regression model is not unduly influenced by their presence. 
+
+\chapter{Marginal costs: Input fuel prices}\label{ch_fuelcost}
+The predominant marginal cost for fossil fuel fired power plants is the cost of fuel \parencite{}. 
+
+In addition to the fuels found in the Electric Utility Receipts of and Average Cost for Fossil Fuels Table, fuel price information is available for kerosene, uranium, and propane.
+For renewable technologies, the AEO supplemental tables contain marginal cost data (i.e., wind, photovoltaic, solar thermal, hydropower, geothermal).
+The uranium marketing annual report, Table S1B. 'Weighted-average price of uranium purchased by owners and operators of U.S. civilian nuclear power reactors, has data on the average purchase price for the period 1994 to 2015 \parencite{eiauranium2016}. 
+It is not clear from the data source if the units are nominal. 
+
+\section{Data sources}
+The EIA, Electric power monthly provides Electric Utility Receipts of and Average Cost for Fossil Fuels for the period 1985 to 2016.
+We stitch together three issues June 1996 (Table 26, p39); January 2010 (Table 4.2, p73); and, 
+May 2016 (Table 4.2, p73) to create the final data set.
+The prices are in dollars per $10^6$ btu and are nominal (i.e., unadjusted for inflation).
+For continuity purposes we use total petroleum price, instead of heavy oil, in the June 1996 document, and the petroleum liquid price in all other cases.
+
+
+
+\chapter{Overnight cost data}\label{overnight}
+We use the Annual Energy Outlooks (AEOs) base overnight capital cost estimates, fixed operations and maintenance cost, and variable operations and maintenance costs. 
+\cite{} (Matteo's paper) show that the costs of climate change adaptation are highly sensitive to overnight capital cost assumptions of power plant technologies. 
+\cite{} (Matteo's paper) in their work focus on nth of its kind plants for nuclear, pulverized coal, natural gas combined cycle, and wind power plants (and excludes carbon capture and energy storage). 
+
+There are criticisms in the literature of these costs that suggest AEO estimates lag behind actual costs by a few years \parencite{}.
+Other cost indexes are available including the Handy-Whitman index of public utility construction cost (HWI), Chemical Engineering Plant Cost Index (CEPI), IHS-CERA North American Power Plant Cost Index (PCCI), \ldots.
+For the period 1970 to 2000 the HWI and CEPI show that power plant construction costs for nuclear, coal and natural gas plants increased at about the rate of inflation \parencite{} (Matteos paper though might want to cite original source [8]). 
+These trends are not supported by all of the literature, as \cite{} found that the overnight cost for coal-fired power plants was decreasing between 1930 to 1970, increasing for the period 1970 to 1987 and plateaued between 1987 to 2006. 
+The early 2000s marked a turning point a variety of different power plants, as reported construction costs began to accelerate (behavior captured by the HWI) \parencite{} (Matteo's paper). 
+Between 2003 and 2007 \cite{du2009update} found that the real total overnight cost in the US for nuclear, coal and natural gas plants increased by 74 percent, 55 percent, and 48 percent, respectively. 
+The EIA's AEO fails to capture a notable increase in overnight cost for the early 2000s, instead the estimates tend to lag behind real-world conditions by a few years (approximately three years) \parencite{}(Matteo's paper).
+At present, we are using the AEO data but could just as easily incorporate any of these other sources given access to their dataset. 
+  
+As technologies have changed so too have the categories of available power production technologies used in the NEMS modeling framework (and listed in the supplemental tables of each Annual Energy Outlook). 
+In this section, we identify the length of record available, in addition to the means and data sources for extending the record to match the length of other available data. 
+
+Each of the years of the overnight cost database contains the following variables: online year, size (MW), lead time (years), first of its kind overnight capital cost (USD per kW), Nth of its kind overnight capital cost (USD per kW), variable operations and maintenance (USD per kWh), fixed operations and maintenance (USD per kW), present heat rate, and future heat rate. 
+The complexity of the overnight cost database has changed over time, in that the database now includes both project contingency factors and technological optimism factors that can be included in the total overnight cost. 
+Further, the database makes clear assumed learning rates for individual technology options. 
+
+The overnight cost dataset is available beginning with the supplemental tables to the 1997 Annual Energy Outlook (AEO). 
+We extrapolate the overnight capital cost, fixed operations and maintenance, and variable operations and maintenance cost data to 1990 using index cost data in \parencite{}(Matteo's paper). 
+
+\section{Categories in the model}
+These are the categories that we include as choice options in the model.
+
+\subsection{Biomass}
+Biomass has remained a consistent category across all available years of the Annual Energy Outlook (AEO). 
+
+\subsection{Coal}
+The coal category exists across all available years of the AEO.  
+\cite{mcnerney2011historical} found that the construction costs of coal-fired power plants between 1997 and 2006 plateaued, which is consistent with expectations from the aggregate Handy-Whitman index \parencite{}(Cite Matteo's paper).
+To extend the data record to 1990 for the coal fired plants we adjust the 1997 costs for inflation backwards to 1990. 
+ 
+\subsection{Conventional combustion turbine}
+The conventional combustion turbine category exists across all available years of the AEO.
+The 1997 AEO category has a slightly different name, which we change to reflect the later years.  
+
+\subsection{Conventional combined cycle}
+The conventional combined cycle began as a category in 1997 and is available for all subsequent years of the AEO. 
+The 1997 AEO category has a slightly different name, which we change to reflect the later years. 
+
+\subsection{Distributed generation}
+The distributed generation, both baseload and peak categories, exists for the period 2001 to present. 
+
+\subsection{Fuel cells}
+The fuel cell category exists across all available years of the AEO.
+
+\subsection{Geothermal}
+The geothermal category exists across all available years of the AEO.
+The geothermal overnight cost is an order of magnitude larger in 1997 than 1999.
+
+\subsection{Hydropower}
+The hydropower category exists for 2005 to present.
+
+\subsection{IGCC}
+The IGCC category exists beginning in the 1999 AEO and continues to present.  
+
+\subsection{Nuclear}
+The nuclear category exists across all available years of the AEO. 
+
+
+\subsection{Photovoltaic} 
+The photovoltaic category exists across all available years of the AEO. 
+The photovoltaic overnight cost is an order of magnitude larger in 1997 than 1999.
+
+\subsection{Solar thermal}
+The solar thermal category exists across all available years of the AEO. 
+The solar thermal overnight cost is an order of magnitude larger in 1997 than 1999.
+
+\subsection{Steam turbines}
+The steam turbine category only exists for the 1997, 1999 and 2000 AEOs.
+The 1997 AEO category has a slightly different name, which we change to reflect the later years. 
+
+\subsection{Wind}
+The wind category exists across all available years of the AEO. 
+
+
+\section{Categories not included in the model}
+The Annual energy outlook, supplemental tables contain information on power production technologies beyond what we can assign (i.e., we don't have enough information to determine whether a plant is an advanced combustion turbine or conventional). 
+
+\subsection{Advanced combined cycle}
+The advanced combined cycle category exists in the AEO beginning in 1997 continuing to present.
+The 1997 AEO category has a slightly different name.  
+
+\subsection{Advanced combined cycle with CCS}
+The advanced combined cycle with CCS category exists in the AEOs beginning in 2004 continuing to present.
+
+\subsection{Advanced coal turbine}
+The advanced coal turbine exists only in the 1997 AEO. 
+
+\subsection{Advanced combustion turbine}
+The advanced combustion turbine exists as a category beginning in the 1997 AEO continuing to present. 
+
+\subsection{Advanced nuclear}
+The advanced nuclear category exists in the AEO beginning in 1997 continuing to present. 
+The 1997 AEO category has a slightly different name. 
+
+\subsection{IGCC with CCS}
+The IGCC with CCS category exists in the AEO beginning in 2004 continuing to present. 
+
+\subsection{Municipal solid waste}
+The MSW category exists in each of the AEOs. 
+We don't include it because it isn't found in the production mix. 
+
+\subsection{Offshore wind}
+The offshore wind category exists in the AEO beginning in 2008 continuing to present.  
+We don't include it because to date almost all of the wind capacity is onshore.
+
+\section{Calculation of the capacity factor}
+We use Form EIA-923 which contains electricity production data to calculate the capacity factor for each fuel production technology pairing. 
+
+\end{document}
