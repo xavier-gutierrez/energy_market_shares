@@ -1,0 +1,29 @@
+status_code	status_code_text	
+BU	backup	
+OA	out of service but expected to return this year	
+OP	operating	
+OS	out of service > 365 days not expected to return this year	
+RE	retired	  # If we keep the retired plants in the database we can backout capacity additions for each year using the retired date (which is available)
+SB	standby or backup	
+SC	cold shutdown	
+SD	sold to nonutility	
+TS	construction complete but not in commercial operation	
+A	proposed increase in generator capability	
+CN	cancelled	  # Remove previously planned but now canceled projects
+CO	under construction	  # Remove units under construction, units awaiting regulatory approval, and units with regulatory approval but not under construciton
+D	proposed decrease in generator capability	
+FC	planned fuel conversion	
+IP	planned, indefinitely postponed	  # Remove planned projects (P and PL) and indefinitely postponed, 
+L	regulatory approval pending but site prep potentially underway	  # Remove units under construction, units awaiting regulatory approval, and units with regulatory approval but not under construciton
+LE	environmental, site or legal challenges	  # Remove sites that are not constructed (legal delays)
+M	proposed deactivated shutdown	
+MO	modification planned for existing generator	
+OT	other	
+P	planned but no regulatory approvals	  # Remove planned projects (P and PL) and indefinitely postponed, 
+PL	planned not under construction	  # Remove planned projects (P and PL) and indefinitely postponed, 
+RA	planned reactivation of previously retired or deactivated unit	  # Remove not yet reactivated plants
+RP	proposed repowering	
+RT	scheduled for retirement	
+T	regulatory approved but not under construction	  # Remove units under construction, units awaiting regulatory approval, and units with regulatory approval but not under construciton
+U	under construction < 50 percent complete	  # Remove additional plants under construction (U and V) and constructed power plants not yet in operation
+V	under construction > 50 percent complete	  # Remove additional plants under construction (U and V) and constructed power plants not yet in operation

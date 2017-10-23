@@ -1,4 +1,3 @@
-overnight <- read.table(paste0(base, "data-raw/overnight.cost.tsv"), header=TRUE, sep ="\t", as.is = TRUE)
 # Although the source has been identified (see below), how this data was compiled is unknown 
 # variable.o.m was orginally handled as if it was reported in Mills/kWh (1 mill = 1/10 cent). This conclusion was made based off source 1.
 # Upon inspection of Table 8.2 'Cost and Performance Characteristics...' (source 2) of the AEO, the following units are used.
@@ -12,18 +11,26 @@ overnight <- read.table(paste0(base, "data-raw/overnight.cost.tsv"), header=TRUE
   # Source 2 : https://www.eia.gov/outlooks/archive/aeo15/
   # Source 3 : https://fred.stlouisfed.org/series/GDPDEF
 
-# relevant data -----------------------------------------------------------
-overnight <- overnight %>%
-  select( "year", "cost.year", "overnight_category", "base.overnight", "variable.o.m", "fixed.o.m") %>%
-  arrange( year, cost.year, overnight_category)
+# Data --------------------------------------------------------------------
+# Industry-level
+overnight <- read.table(paste0(base, "data-raw/overnight.cost.tsv"), header=TRUE, sep ="\t", as.is = TRUE)
+%>%
+  select(year, cost.year, overnight_category, base.overnight, variable.o.m, fixed.o.m) %>%
+  arrange(year, cost.year, overnight_category)
+
+# Capacity Factors
+summary.cf <- read.csv(paste(base, 'data-proc/capacity_factors.csv',sep=''))
+
+# GDPDEF
+gdpdef <- read.csv(paste(base,"data-raw/GDPDEF.csv",sep=''))
 
 # unit conversions --------------------------------------------------------
 overnight <- overnight %>% 
   mutate(fixed.o.m = fixed.o.m/1000/8760,# /kWyr -> /MWh
          base.overnight = base.overnight/1000) # /kW -> MW
 
-# dollar value conversions ------------------------------------------------
-gdpdef <- read.csv(paste(base,"data-raw/GDPDEF.csv",sep=''))
+
+# value adjustment --------------------------------------------------------
 gdpdef$year <- ymd(gdpdef$DATE) %>% year()
 gdpdef <- gdpdef %>%
   select(year, GDPDEF) %>%
@@ -44,6 +51,12 @@ adj.overnight <- overnight %>%
          fixed.o.m = deflator75 * fixed.o.m) %>%
   select(-cost.year, -deflator75)
 
+
+# scale overnight with capacity factor ------------------------------------
+
+
+
+# plot --------------------------------------------------------------------
 o.m <- adj.overnight %>%
   select(-base.overnight) %>%
   melt( id.vars=c('year', 'overnight_category'), 

@@ -1,0 +1,79 @@
+"fuel","fuel_text","fuel_general"
+"AB","Agriculture crop byproducts, straw, energy crops","biomass"
+"ANT","Anthracite","coal"
+"BFG","blast furnace gas",NA
+"BIO","biomass generic","biomass"
+"BIT","bituminous coal","coal"
+"BL","not defined",NA
+"BLQ","black liquor","black liquor"
+"COG","coke oven gas",NA
+"COL","coal generic","coal"
+"COM","coal oil mixture","oil"
+"CRU","crude oil","oil"
+"CWM","coal water mixture","coal"
+"DFO","distillate fuel oil","oil"
+"FO1","no 1 fuel oil","oil"
+"FO2","no 2 fuel oil","oil"
+"FO3","no 3 fuel oil","oil"
+"FO4","no 4 fuel oil","oil"
+"FO5","no 5 fuel oil","oil"
+"FO6","no 6 fuel oil","oil"
+"GAS","gas generic","natural gas"
+"GEO","geothermal","geothermal"
+"GST","geothermal steam","geothermal"
+"JF","jet fuel","kerosene"
+"KER","kerosene","kerosene"
+"LFG","landfill gas","natural gas"
+"LIG","lignite","coal"
+"LNG","liquified natural gas","lng"
+"LPG","liquified propane gas","lpg"
+"MF","multifueled","msw"
+"MSW","municipal solid waste",NA
+"MTE","methane","natural gas"
+"MWH","megawatt hour","MWh"
+"MTH","methanol",NA
+"NG","natural gas","natural gas"
+"NUC","nuclear","uranium"
+"OBG","other biomass gases","natural gas"
+"OBL","other biomass liquids","oil"
+"OBS","other biomass solids","biomass"
+"OG","other gas",NA
+"OO","not defined",NA
+"OTH","other",NA
+"PC","petroleum coke","coal"
+"PET","petroleum generic","oil"
+"PL","plutonium","uranium"
+"PRO","propane","propane"
+"REF","refuse, bagasse and all other nonwood waste","biomass"
+"RG","refinery gas",NA
+"RRO","re refined motor oil","oil"
+"SNG","synthetic natural gas","natural gas"
+"STM","steam",NA
+"SUB","subbituminous coal","coal"
+"SUN","sun","solar"
+"TH","thorium","uranium"
+"TOP","topped crude oil","oil"
+"UR","uranium","uranium"
+"WAT","water","water"
+"WC","waste coal","coal"
+"WD","wood and wood waste","biomass"
+"WH","waste heat",NA
+"WND","wind","wind"
+"OT","other",NA
+"NA","not available",NA
+"PG","propane","propane"
+"PUR","purchased steam",NA
+"RC","refined coal","coal"
+"RFO","residual fuel oil","oil"
+"SC","coal synfuel","coal"
+"SG","synthetic gas other than coal derived","natural gas"
+"SGC","coal-derived synthetic gas","natural gas"
+"SGP","synthetic gas from petroleum coke","natural gas"
+"SLW","sludge waste",NA
+"SU","not defined",NA
+"TDF","tires",NA
+"UNK","not defined",NA
+"WDL","wood waste liquids","biomass"
+"WDS","wood and wood waste solids","biomass"
+"WO","oil-other and waste oil","oil"
+"WOC","not defined",NA

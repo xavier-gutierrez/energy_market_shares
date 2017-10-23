@@ -1,0 +1,501 @@
+"overnight_category","fuel_1_general","year"
+"biomass","biomass",1990
+"biomass","biomass",1991
+"biomass","biomass",1992
+"biomass","biomass",1993
+"biomass","biomass",1994
+"biomass","biomass",1995
+"biomass","biomass",1996
+"biomass","biomass",1997
+"biomass","biomass",1998
+"biomass","biomass",1999
+"biomass","biomass",2000
+"biomass","biomass",2001
+"biomass","biomass",2002
+"biomass","biomass",2003
+"biomass","biomass",2004
+"biomass","biomass",2005
+"biomass","biomass",2006
+"biomass","biomass",2007
+"biomass","biomass",2008
+"biomass","biomass",2009
+"biomass","biomass",2010
+"biomass","biomass",2011
+"biomass","biomass",2012
+"biomass","biomass",2013
+"biomass","biomass",2014
+"coal","coal",1990
+"coal","coal",1991
+"coal","coal",1992
+"coal","coal",1993
+"coal","coal",1994
+"coal","coal",1995
+"coal","coal",1996
+"coal","coal",1997
+"coal","coal",1998
+"coal","coal",1999
+"coal","coal",2000
+"coal","coal",2001
+"coal","coal",2002
+"coal","coal",2003
+"coal","coal",2004
+"coal","coal",2005
+"coal","coal",2006
+"coal","coal",2007
+"coal","coal",2008
+"coal","coal",2009
+"coal","coal",2010
+"coal","coal",2011
+"coal","coal",2012
+"coal","coal",2013
+"coal","coal",2014
+"conventional combined cycle","natural gas",1990
+"conventional combined cycle","natural gas",1991
+"conventional combined cycle","natural gas",1992
+"conventional combined cycle","natural gas",1993
+"conventional combined cycle","natural gas",1994
+"conventional combined cycle","natural gas",1995
+"conventional combined cycle","natural gas",1996
+"conventional combined cycle","natural gas",1997
+"conventional combined cycle","natural gas",1998
+"conventional combined cycle","natural gas",1999
+"conventional combined cycle","natural gas",2000
+"conventional combined cycle","natural gas",2001
+"conventional combined cycle","natural gas",2002
+"conventional combined cycle","natural gas",2003
+"conventional combined cycle","natural gas",2004
+"conventional combined cycle","natural gas",2005
+"conventional combined cycle","natural gas",2006
+"conventional combined cycle","natural gas",2007
+"conventional combined cycle","natural gas",2008
+"conventional combined cycle","natural gas",2009
+"conventional combined cycle","natural gas",2010
+"conventional combined cycle","natural gas",2011
+"conventional combined cycle","natural gas",2012
+"conventional combined cycle","natural gas",2013
+"conventional combined cycle","natural gas",2014
+"conventional combined cycle","oil",1990
+"conventional combined cycle","oil",1991
+"conventional combined cycle","oil",1992
+"conventional combined cycle","oil",1993
+"conventional combined cycle","oil",1994
+"conventional combined cycle","oil",1995
+"conventional combined cycle","oil",1996
+"conventional combined cycle","oil",1997
+"conventional combined cycle","oil",1998
+"conventional combined cycle","oil",1999
+"conventional combined cycle","oil",2000
+"conventional combined cycle","oil",2001
+"conventional combined cycle","oil",2002
+"conventional combined cycle","oil",2003
+"conventional combined cycle","oil",2004
+"conventional combined cycle","oil",2005
+"conventional combined cycle","oil",2006
+"conventional combined cycle","oil",2007
+"conventional combined cycle","oil",2008
+"conventional combined cycle","oil",2009
+"conventional combined cycle","oil",2010
+"conventional combined cycle","oil",2011
+"conventional combined cycle","oil",2012
+"conventional combined cycle","oil",2013
+"conventional combined cycle","oil",2014
+"conventional combustion turbine","kerosene",1990
+"conventional combustion turbine","kerosene",1991
+"conventional combustion turbine","kerosene",1992
+"conventional combustion turbine","kerosene",1993
+"conventional combustion turbine","kerosene",1994
+"conventional combustion turbine","kerosene",1995
+"conventional combustion turbine","kerosene",1996
+"conventional combustion turbine","kerosene",1997
+"conventional combustion turbine","kerosene",1998
+"conventional combustion turbine","kerosene",1999
+"conventional combustion turbine","kerosene",2000
+"conventional combustion turbine","kerosene",2001
+"conventional combustion turbine","kerosene",2002
+"conventional combustion turbine","kerosene",2003
+"conventional combustion turbine","kerosene",2004
+"conventional combustion turbine","kerosene",2005
+"conventional combustion turbine","kerosene",2006
+"conventional combustion turbine","kerosene",2007
+"conventional combustion turbine","kerosene",2008
+"conventional combustion turbine","kerosene",2009
+"conventional combustion turbine","kerosene",2010
+"conventional combustion turbine","kerosene",2011
+"conventional combustion turbine","kerosene",2012
+"conventional combustion turbine","kerosene",2013
+"conventional combustion turbine","kerosene",2014
+"conventional combustion turbine","natural gas",1990
+"conventional combustion turbine","natural gas",1991
+"conventional combustion turbine","natural gas",1992
+"conventional combustion turbine","natural gas",1993
+"conventional combustion turbine","natural gas",1994
+"conventional combustion turbine","natural gas",1995
+"conventional combustion turbine","natural gas",1996
+"conventional combustion turbine","natural gas",1997
+"conventional combustion turbine","natural gas",1998
+"conventional combustion turbine","natural gas",1999
+"conventional combustion turbine","natural gas",2000
+"conventional combustion turbine","natural gas",2001
+"conventional combustion turbine","natural gas",2002
+"conventional combustion turbine","natural gas",2003
+"conventional combustion turbine","natural gas",2004
+"conventional combustion turbine","natural gas",2005
+"conventional combustion turbine","natural gas",2006
+"conventional combustion turbine","natural gas",2007
+"conventional combustion turbine","natural gas",2008
+"conventional combustion turbine","natural gas",2009
+"conventional combustion turbine","natural gas",2010
+"conventional combustion turbine","natural gas",2011
+"conventional combustion turbine","natural gas",2012
+"conventional combustion turbine","natural gas",2013
+"conventional combustion turbine","natural gas",2014
+"conventional combustion turbine","oil",1990
+"conventional combustion turbine","oil",1991
+"conventional combustion turbine","oil",1992
+"conventional combustion turbine","oil",1993
+"conventional combustion turbine","oil",1994
+"conventional combustion turbine","oil",1995
+"conventional combustion turbine","oil",1996
+"conventional combustion turbine","oil",1997
+"conventional combustion turbine","oil",1998
+"conventional combustion turbine","oil",1999
+"conventional combustion turbine","oil",2000
+"conventional combustion turbine","oil",2001
+"conventional combustion turbine","oil",2002
+"conventional combustion turbine","oil",2003
+"conventional combustion turbine","oil",2004
+"conventional combustion turbine","oil",2005
+"conventional combustion turbine","oil",2006
+"conventional combustion turbine","oil",2007
+"conventional combustion turbine","oil",2008
+"conventional combustion turbine","oil",2009
+"conventional combustion turbine","oil",2010
+"conventional combustion turbine","oil",2011
+"conventional combustion turbine","oil",2012
+"conventional combustion turbine","oil",2013
+"conventional combustion turbine","oil",2014
+"conventional combustion turbine","propane",1990
+"conventional combustion turbine","propane",1991
+"conventional combustion turbine","propane",1992
+"conventional combustion turbine","propane",1993
+"conventional combustion turbine","propane",1994
+"conventional combustion turbine","propane",1995
+"conventional combustion turbine","propane",1996
+"conventional combustion turbine","propane",1997
+"conventional combustion turbine","propane",1998
+"conventional combustion turbine","propane",1999
+"conventional combustion turbine","propane",2000
+"conventional combustion turbine","propane",2001
+"conventional combustion turbine","propane",2002
+"conventional combustion turbine","propane",2003
+"conventional combustion turbine","propane",2004
+"conventional combustion turbine","propane",2005
+"conventional combustion turbine","propane",2006
+"conventional combustion turbine","propane",2007
+"conventional combustion turbine","propane",2008
+"conventional combustion turbine","propane",2009
+"conventional combustion turbine","propane",2010
+"conventional combustion turbine","propane",2011
+"conventional combustion turbine","propane",2012
+"conventional combustion turbine","propane",2013
+"conventional combustion turbine","propane",2014
+"distributed","MWh",1990
+"distributed","MWh",1991
+"distributed","MWh",1992
+"distributed","MWh",1993
+"distributed","MWh",1994
+"distributed","MWh",1995
+"distributed","MWh",1996
+"distributed","MWh",1997
+"distributed","MWh",1998
+"distributed","MWh",1999
+"distributed","MWh",2000
+"distributed","MWh",2001
+"distributed","MWh",2002
+"distributed","MWh",2003
+"distributed","MWh",2004
+"distributed","MWh",2005
+"distributed","MWh",2006
+"distributed","MWh",2007
+"distributed","MWh",2008
+"distributed","MWh",2009
+"distributed","MWh",2010
+"distributed","MWh",2011
+"distributed","MWh",2012
+"distributed","MWh",2013
+"distributed","MWh",2014
+"fuel cell","natural gas",1990
+"fuel cell","natural gas",1991
+"fuel cell","natural gas",1992
+"fuel cell","natural gas",1993
+"fuel cell","natural gas",1994
+"fuel cell","natural gas",1995
+"fuel cell","natural gas",1996
+"fuel cell","natural gas",1997
+"fuel cell","natural gas",1998
+"fuel cell","natural gas",1999
+"fuel cell","natural gas",2000
+"fuel cell","natural gas",2001
+"fuel cell","natural gas",2002
+"fuel cell","natural gas",2003
+"fuel cell","natural gas",2004
+"fuel cell","natural gas",2005
+"fuel cell","natural gas",2006
+"fuel cell","natural gas",2007
+"fuel cell","natural gas",2008
+"fuel cell","natural gas",2009
+"fuel cell","natural gas",2010
+"fuel cell","natural gas",2011
+"fuel cell","natural gas",2012
+"fuel cell","natural gas",2013
+"fuel cell","natural gas",2014
+"geothermal","geothermal",1990
+"geothermal","geothermal",1991
+"geothermal","geothermal",1992
+"geothermal","geothermal",1993
+"geothermal","geothermal",1994
+"geothermal","geothermal",1995
+"geothermal","geothermal",1996
+"geothermal","geothermal",1997
+"geothermal","geothermal",1998
+"geothermal","geothermal",1999
+"geothermal","geothermal",2000
+"geothermal","geothermal",2001
+"geothermal","geothermal",2002
+"geothermal","geothermal",2003
+"geothermal","geothermal",2004
+"geothermal","geothermal",2005
+"geothermal","geothermal",2006
+"geothermal","geothermal",2007
+"geothermal","geothermal",2008
+"geothermal","geothermal",2009
+"geothermal","geothermal",2010
+"geothermal","geothermal",2011
+"geothermal","geothermal",2012
+"geothermal","geothermal",2013
+"geothermal","geothermal",2014
+"hydro","water",1990
+"hydro","water",1991
+"hydro","water",1992
+"hydro","water",1993
+"hydro","water",1994
+"hydro","water",1995
+"hydro","water",1996
+"hydro","water",1997
+"hydro","water",1998
+"hydro","water",1999
+"hydro","water",2000
+"hydro","water",2001
+"hydro","water",2002
+"hydro","water",2003
+"hydro","water",2004
+"hydro","water",2005
+"hydro","water",2006
+"hydro","water",2007
+"hydro","water",2008
+"hydro","water",2009
+"hydro","water",2010
+"hydro","water",2011
+"hydro","water",2012
+"hydro","water",2013
+"hydro","water",2014
+"igcc","coal",1990
+"igcc","coal",1991
+"igcc","coal",1992
+"igcc","coal",1993
+"igcc","coal",1994
+"igcc","coal",1995
+"igcc","coal",1996
+"igcc","coal",1997
+"igcc","coal",1998
+"igcc","coal",1999
+"igcc","coal",2000
+"igcc","coal",2001
+"igcc","coal",2002
+"igcc","coal",2003
+"igcc","coal",2004
+"igcc","coal",2005
+"igcc","coal",2006
+"igcc","coal",2007
+"igcc","coal",2008
+"igcc","coal",2009
+"igcc","coal",2010
+"igcc","coal",2011
+"igcc","coal",2012
+"igcc","coal",2013
+"igcc","coal",2014
+"nuclear","uranium",1990
+"nuclear","uranium",1991
+"nuclear","uranium",1992
+"nuclear","uranium",1993
+"nuclear","uranium",1994
+"nuclear","uranium",1995
+"nuclear","uranium",1996
+"nuclear","uranium",1997
+"nuclear","uranium",1998
+"nuclear","uranium",1999
+"nuclear","uranium",2000
+"nuclear","uranium",2001
+"nuclear","uranium",2002
+"nuclear","uranium",2003
+"nuclear","uranium",2004
+"nuclear","uranium",2005
+"nuclear","uranium",2006
+"nuclear","uranium",2007
+"nuclear","uranium",2008
+"nuclear","uranium",2009
+"nuclear","uranium",2010
+"nuclear","uranium",2011
+"nuclear","uranium",2012
+"nuclear","uranium",2013
+"nuclear","uranium",2014
+"photovoltaic","solar",1990
+"photovoltaic","solar",1991
+"photovoltaic","solar",1992
+"photovoltaic","solar",1993
+"photovoltaic","solar",1994
+"photovoltaic","solar",1995
+"photovoltaic","solar",1996
+"photovoltaic","solar",1997
+"photovoltaic","solar",1998
+"photovoltaic","solar",1999
+"photovoltaic","solar",2000
+"photovoltaic","solar",2001
+"photovoltaic","solar",2002
+"photovoltaic","solar",2003
+"photovoltaic","solar",2004
+"photovoltaic","solar",2005
+"photovoltaic","solar",2006
+"photovoltaic","solar",2007
+"photovoltaic","solar",2008
+"photovoltaic","solar",2009
+"photovoltaic","solar",2010
+"photovoltaic","solar",2011
+"photovoltaic","solar",2012
+"photovoltaic","solar",2013
+"photovoltaic","solar",2014
+"solar thermal","solar",1990
+"solar thermal","solar",1991
+"solar thermal","solar",1992
+"solar thermal","solar",1993
+"solar thermal","solar",1994
+"solar thermal","solar",1995
+"solar thermal","solar",1996
+"solar thermal","solar",1997
+"solar thermal","solar",1998
+"solar thermal","solar",1999
+"solar thermal","solar",2000
+"solar thermal","solar",2001
+"solar thermal","solar",2002
+"solar thermal","solar",2003
+"solar thermal","solar",2004
+"solar thermal","solar",2005
+"solar thermal","solar",2006
+"solar thermal","solar",2007
+"solar thermal","solar",2008
+"solar thermal","solar",2009
+"solar thermal","solar",2010
+"solar thermal","solar",2011
+"solar thermal","solar",2012
+"solar thermal","solar",2013
+"solar thermal","solar",2014
+"steam turbine","black liquor",1990
+"steam turbine","black liquor",1991
+"steam turbine","black liquor",1992
+"steam turbine","black liquor",1993
+"steam turbine","black liquor",1994
+"steam turbine","black liquor",1995
+"steam turbine","black liquor",1996
+"steam turbine","black liquor",1997
+"steam turbine","black liquor",1998
+"steam turbine","black liquor",1999
+"steam turbine","black liquor",2000
+"steam turbine","black liquor",2001
+"steam turbine","black liquor",2002
+"steam turbine","black liquor",2003
+"steam turbine","black liquor",2004
+"steam turbine","black liquor",2005
+"steam turbine","black liquor",2006
+"steam turbine","black liquor",2007
+"steam turbine","black liquor",2008
+"steam turbine","black liquor",2009
+"steam turbine","black liquor",2010
+"steam turbine","black liquor",2011
+"steam turbine","black liquor",2012
+"steam turbine","black liquor",2013
+"steam turbine","black liquor",2014
+"steam turbine","natural gas",1990
+"steam turbine","natural gas",1991
+"steam turbine","natural gas",1992
+"steam turbine","natural gas",1993
+"steam turbine","natural gas",1994
+"steam turbine","natural gas",1995
+"steam turbine","natural gas",1996
+"steam turbine","natural gas",1997
+"steam turbine","natural gas",1998
+"steam turbine","natural gas",1999
+"steam turbine","natural gas",2000
+"steam turbine","natural gas",2001
+"steam turbine","natural gas",2002
+"steam turbine","natural gas",2003
+"steam turbine","natural gas",2004
+"steam turbine","natural gas",2005
+"steam turbine","natural gas",2006
+"steam turbine","natural gas",2007
+"steam turbine","natural gas",2008
+"steam turbine","natural gas",2009
+"steam turbine","natural gas",2010
+"steam turbine","natural gas",2011
+"steam turbine","natural gas",2012
+"steam turbine","natural gas",2013
+"steam turbine","natural gas",2014
+"steam turbine","oil",1990
+"steam turbine","oil",1991
+"steam turbine","oil",1992
+"steam turbine","oil",1993
+"steam turbine","oil",1994
+"steam turbine","oil",1995
+"steam turbine","oil",1996
+"steam turbine","oil",1997
+"steam turbine","oil",1998
+"steam turbine","oil",1999
+"steam turbine","oil",2000
+"steam turbine","oil",2001
+"steam turbine","oil",2002
+"steam turbine","oil",2003
+"steam turbine","oil",2004
+"steam turbine","oil",2005
+"steam turbine","oil",2006
+"steam turbine","oil",2007
+"steam turbine","oil",2008
+"steam turbine","oil",2009
+"steam turbine","oil",2010
+"steam turbine","oil",2011
+"steam turbine","oil",2012
+"steam turbine","oil",2013
+"steam turbine","oil",2014
+"wind","wind",1990
+"wind","wind",1991
+"wind","wind",1992
+"wind","wind",1993
+"wind","wind",1994
+"wind","wind",1995
+"wind","wind",1996
+"wind","wind",1997
+"wind","wind",1998
+"wind","wind",1999
+"wind","wind",2000
+"wind","wind",2001
+"wind","wind",2002
+"wind","wind",2003
+"wind","wind",2004
+"wind","wind",2005
+"wind","wind",2006
+"wind","wind",2007
+"wind","wind",2008
+"wind","wind",2009
+"wind","wind",2010
+"wind","wind",2011
+"wind","wind",2012
+"wind","wind",2013
+"wind","wind",2014
