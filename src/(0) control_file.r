@@ -6,8 +6,8 @@ library(data.table)
 library(ggplot2)
 library(reshape2)
 library(lubridate)
-library(mlogit)
-base <- 'C:/Users/xavie/Desktop/energy_market_shares/'
+library(magrittr)
+base <- 'C:/Users/guti220/Desktop/energy_market_shares/'
 path_code = "C:/Users/xavie/Desktop/energy_market_shares/src/"
 path_data = "C:/Users/xavier/Desktop/energy_market_shares/data/"
 path_figure = "C:/Users/guti220/Desktop/energy_market_shares/figures/"

@@ -13,8 +13,7 @@
 
 # Data --------------------------------------------------------------------
 # Industry-level
-overnight <- read.table(paste0(base, "data-raw/overnight.cost.tsv"), header=TRUE, sep ="\t", as.is = TRUE)
-%>%
+overnight <- read.table(paste0(base, "data-raw/overnight.cost.tsv"), header=TRUE, sep ="\t", as.is = TRUE) %>%
   select(year, cost.year, overnight_category, base.overnight, variable.o.m, fixed.o.m) %>%
   arrange(year, cost.year, overnight_category)
 

@@ -36,22 +36,19 @@ cap.eia.processed <- read.csv(paste0(base, "data-proc/eia860_processed.csv",sep=
 # mapping_860_overnight.R
 # contains fuel and overnight_category information, as well as heat rate data
 cap.eia.supplemented <- cap.eia.processed %>%
-  mutate(heat_rate = replace(heat_rate, heat_rate == 0, NA)) %>%
   left_join(ca.elec.almanac, by=c("plant_code", "year")) %>% 
   # join CA almanac heat rates data to mapping_860_overnight_R.tsv data
   # multiple plants w/in same year ? 5005 original heat.rates, yet pasted 11243 times in final cap.eia dataframe
-  mutate(heat_rate = ifelse(is.na(heat_rate)==FALSE, heat_rate, heat.rate))
+  mutate(heat_rate = ifelse(heat_rate==0, NA, heat_rate)) %>%
+  mutate(heat_rate = ifelse(is.na(heat_rate), heat.rate, heat_rate))
   # where 860 heat_rate data exists, leave. where NA, replace with CA heat.rate data
   # select(year, plant_code, summer_capacity)
-imp.cols <- names(cap.eia.supplemented)[match(c("year", "plant_code", "overnight_category", "heat_rate", "summer_capacity"), names(cap.eia))]
-unimp.cols <- names(cap.eia.supplemented)[!(names(cap.eia) %in% imp.cols)]
-cap.eia.supplemented <- arrange(cap.eia.supplemented[ , c(imp.cols, unimp.cols)])
 
 # how many plants' heat_rate is replaced with ca.elec.almanac?
 test <- cap.eia.processed %>%
-  mutate(heat_rate <- replace(heat_rate, heat_rate == 0, NA)) %>%
   left_join(ca.elec.almanac, by=c("plant_code", "year")) %>% 
-  filter(is.na(heat_rate) & ! is.na(heat.rate))
+  mutate(heat_rate = ifelse(heat_rate==0, NA, heat_rate)) %>%
+  filter(is.na(heat_rate) & !is.na(heat.rate) & heat.rate!=0)
 nrow(test)
 
 # save file ---------------------------------------------------------------

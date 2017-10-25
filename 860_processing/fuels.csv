@@ -1,79 +1,78 @@
-"fuel","fuel_text","fuel_general"
-"AB","Agriculture crop byproducts, straw, energy crops","biomass"
-"ANT","Anthracite","coal"
-"BFG","blast furnace gas",NA
-"BIO","biomass generic","biomass"
-"BIT","bituminous coal","coal"
-"BL","not defined",NA
-"BLQ","black liquor","black liquor"
-"COG","coke oven gas",NA
-"COL","coal generic","coal"
-"COM","coal oil mixture","oil"
-"CRU","crude oil","oil"
-"CWM","coal water mixture","coal"
-"DFO","distillate fuel oil","oil"
-"FO1","no 1 fuel oil","oil"
-"FO2","no 2 fuel oil","oil"
-"FO3","no 3 fuel oil","oil"
-"FO4","no 4 fuel oil","oil"
-"FO5","no 5 fuel oil","oil"
-"FO6","no 6 fuel oil","oil"
-"GAS","gas generic","natural gas"
-"GEO","geothermal","geothermal"
-"GST","geothermal steam","geothermal"
-"JF","jet fuel","kerosene"
-"KER","kerosene","kerosene"
-"LFG","landfill gas","natural gas"
-"LIG","lignite","coal"
-"LNG","liquified natural gas","lng"
-"LPG","liquified propane gas","lpg"
-"MF","multifueled","msw"
-"MSW","municipal solid waste",NA
-"MTE","methane","natural gas"
-"MWH","megawatt hour","MWh"
-"MTH","methanol",NA
-"NG","natural gas","natural gas"
-"NUC","nuclear","uranium"
-"OBG","other biomass gases","natural gas"
-"OBL","other biomass liquids","oil"
-"OBS","other biomass solids","biomass"
-"OG","other gas",NA
-"OO","not defined",NA
-"OTH","other",NA
-"PC","petroleum coke","coal"
-"PET","petroleum generic","oil"
-"PL","plutonium","uranium"
-"PRO","propane","propane"
-"REF","refuse, bagasse and all other nonwood waste","biomass"
-"RG","refinery gas",NA
-"RRO","re refined motor oil","oil"
-"SNG","synthetic natural gas","natural gas"
-"STM","steam",NA
-"SUB","subbituminous coal","coal"
-"SUN","sun","solar"
-"TH","thorium","uranium"
-"TOP","topped crude oil","oil"
-"UR","uranium","uranium"
-"WAT","water","water"
-"WC","waste coal","coal"
-"WD","wood and wood waste","biomass"
-"WH","waste heat",NA
-"WND","wind","wind"
-"OT","other",NA
-"NA","not available",NA
-"PG","propane","propane"
-"PUR","purchased steam",NA
-"RC","refined coal","coal"
-"RFO","residual fuel oil","oil"
-"SC","coal synfuel","coal"
-"SG","synthetic gas other than coal derived","natural gas"
-"SGC","coal-derived synthetic gas","natural gas"
-"SGP","synthetic gas from petroleum coke","natural gas"
-"SLW","sludge waste",NA
-"SU","not defined",NA
-"TDF","tires",NA
-"UNK","not defined",NA
-"WDL","wood waste liquids","biomass"
-"WDS","wood and wood waste solids","biomass"
-"WO","oil-other and waste oil","oil"
-"WOC","not defined",NA
+fuel,fuel_text,fuel_general,corrections from write-up,cap.raw
+AB,"Agriculture crop byproducts, straw, energy crops",biomass,biomass,
+OBS,other biomass solids,biomass,biomass,
+REF,"refuse, bagasse and all other nonwood waste",biomass,biomass,
+WD,wood and wood waste,biomass,biomass,
+WDS,wood and wood waste solids,biomass,biomass,
+BL,not defined,NA,black liquor (NA),
+ANT,Anthracite,coal,coal,
+BIT,bituminous coal,coal,coal,
+COL,coal generic,coal,coal,
+LIG,lignite,coal,coal,
+PC,petroleum coke,coal,coal,
+RC,refined coal,coal,coal,
+SC,coal synfuel,coal,coal,
+SUB,subbituminous coal,coal,coal,
+WC,waste coal,coal,coal,
+OT,other,NA,INCOMPLETE,
+OTH,other,NA,INCOMPLETE,
+JF,jet fuel,kerosene,kerosene,
+KER,kerosene,kerosene,kerosene,
+WDL,wood waste liquids,biomass,NA,# mismatched
+BLQ,black liquor,black liquor,NA,# mismatched
+LNG,liquified natural gas,lng,NA,# mismatched
+LPG,liquified propane gas,lpg,NA,# mismatched
+MSW,municipal solid waste,msw,NA,# mismatched
+BFG,blast furnace gas,NA,NA,
+MF,multifueled,NA,NA,
+OG,other gas,NA,NA,
+PUR,purchased steam,NA,NA,
+RG,refinery gas,NA,NA,
+SLW,sludge waste,NA,NA,
+STM,steam,NA,NA,
+TDF,tires,NA,NA,
+WH,waste heat,NA,NA,
+TH,thorium,uranium,NA,
+LFG,landfill gas,natural gas,natural gas,
+MTE,methane,natural gas,natural gas,
+NG,natural gas,natural gas,natural gas,
+OBG,other biomass gases,natural gas,natural gas,
+SG,synthetic gas other than coal derived,natural gas,natural gas,
+SGC,coal-derived synthetic gas,natural gas,natural gas,
+SGP,synthetic gas from petroleum coke,natural gas,natural gas,
+SNG,synthetic natural gas,natural gas,natural gas,
+DFO,distillate fuel oil,oil,oil,
+FO1,no 1 fuel oil,oil,oil,
+FO2,no 2 fuel oil,oil,oil,
+FO4,no 4 fuel oil,oil,oil,
+FO5,no 5 fuel oil,oil,oil,
+FO6,no 6 fuel oil,oil,oil,
+OBL,other biomass liquids,oil,oil,
+RFO,residual fuel oil,oil,oil,
+WO,oil-other and waste oil,oil,oil,
+GEO,geothermal,geothermal,renewables,
+GST,geothermal steam,geothermal,renewables,
+SUN,sun,solar,renewables,
+WAT,water,water,renewables,
+WND,wind,wind,renewables,
+NUC,nuclear,uranium,uranium,
+UR,uranium,uranium,uranium,
+BIO,biomass generic,biomass,ZERO,
+CWM,coal water mixture,coal,ZERO,
+COG,coke oven gas,NA,ZERO,
+MTH,methanol,NA,ZERO,
+GAS,gas generic,natural gas,ZERO,# many installed generators w/o capacity. All ST mover. Most retired. Some MF/PET fuel 2. Zero heat rate
+COM,coal oil mixture,oil,ZERO,
+CRU,crude oil,oil,ZERO,# many installed generators w/o capacity. All ST mover. Most retired. Zero heat rate
+FO3,no 3 fuel oil,oil,ZERO,
+PET,petroleum generic,oil,ZERO,# many installed generators w/o capacity. All ST/IC mover. Zero heat rate
+RRO,re refined motor oil,oil,ZERO,
+TOP,topped crude oil,oil,ZERO,
+PRO,propane,propane,ZERO,
+PL,plutonium,uranium,ZERO,
+PG,propane,propane,ZERO/SMALL,"# 94 entries, .1 MW capacity. N/A heat rate"
+MWH,megawatt hour,MWh,,
+OO,not defined,NA,,# not in data
+SU,not defined,NA,,# not in data
+UNK,not defined,NA,,# many installed generators w/o capacity. All ST/IC mover. Zero heat rate. 
+WOC,not defined,NA,,# 16 entries with small&large capacities. All ST mover. 
