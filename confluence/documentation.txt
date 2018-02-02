@@ -1,0 +1,39 @@
+Files
+
+See attached:
+
+US_elec_gen_cost_clean.R - Script to clean and process data
+
+elec_gen_usa_MER_T07_02A.csv - US total annual electricity generation by fuel
+
+elec_OMF_costs_plant_type_2003_2012.csv - Operations, maintenance, and fuel costs from 2003-2012 for 4 types of facilities (nuclear, fossil steam, hydroelectric, and "gas turbine/small scale”)
+
+us_elec_gen_cost.csv - Cleaned data
+
+ 
+
+capacity_fuel_net.csv - Existing Nameplate and Net Summer Capacity by Energy Source, Producer Type and State (EIA-860)(1990-2014) https://www.eia.gov/electricity/data/state/
+
+uscapacity_fuel_net.csv - total of capacity_fuel_net.csv for the US (same source and other information)
+
+Econ1_data.py - reads in data and generates the net change in summer capacity
+Data
+
+My understanding of the data that we want – with as long of a time series as possible – are:
+
+(1) Total annual electricity generation by fuel
+
+    Existing capacity by fuel type and producer type (avoid industrial and commercial power generation)
+    Capital, operations, maintenance, and fuel costs for electricity generation plants, by fuel (and technology, where possible)
+    Capacity additions, retirements and changes by energy source is available (1994-2014)(Source: http://www.eia.gov/electricity/annual/)
+
+
+I have the first from 1949 – 2014 for 12 fuel categories, so we’re good there (attached).
+
+For the second, I currently have:
+* Operations, maintenance, and fuel costs from 2003-2012 (attached).
+* I also have “overnight capital costs”, “fixed O&M costs", and "variable O&M costs” for 2010 only (with updated overnight capital costs in 2011), by detailed production technology (e.g., advanced pn w/ ccs, dual unit igcc, advanced ngcc w/ ccs).
+
+Anupriya looked for any other time series data on capital, O&M, and fuel costs, by electricity generation type, but also couldn't find any.
+
+The EIA data can be found here: http://www.eia.gov/totalenergy/data/annual/index.cfm#electricity and the chapter with the energy price data is here: http://www.eia.gov/totalenergy/data/monthly/pdf/sec9.pdf
